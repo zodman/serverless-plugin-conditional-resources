@@ -3,7 +3,7 @@
 /**
   * Plugin Class
   */
-class serverlessPluginConditionalFunctions {
+class serverlessPluginConditionalResources {
   /**
     * C'tor
     * @param {*} serverless
@@ -22,24 +22,24 @@ class serverlessPluginConditionalFunctions {
     * Evaluates function 'enabled' states
     */
   applyConditions() {
-    const functions = this.serverless.service.functions;
-    if (!this.isValidObject(functions)) {
+    const resources = this.serverless.service.resources;
+    if (!this.isValidObject(resources)) {
       return;
     }
-    Object.keys(functions).forEach((functionName) => {
-      const functionObj = functions[functionName];
-      if (functionObj.enabled) {
+    Object.keys(resources).forEach((resource) => {
+      const resourceObj = resources[resource];
+      if (resourceObj.enabled) {
         try {
-          const functionEnabledValue = eval(functionObj.enabled);
-          const action = functionEnabledValue ? 'Enable' : 'Disable';
+          const EnabledValue = eval(resourceObj.enabled);
+          const action = EnabledValue ? 'Enable' : 'Disable';
 
-          this.logConditionValue(functionObj.enabled, functionEnabledValue);
-          this.verboseLog(this.pluginName + ' - ' + action + ': ' + functionObj.name);
-          if (!functionEnabledValue) {
-            delete this.serverless.service.functions[functionName];
+          this.logConditionValue(resourceObj.enabled, EnabledValue);
+          this.verboseLog(this.pluginName + ' - ' + action + ': ' + resourceObj.name);
+          if (!EnabledValue) {
+            delete this.serverless.service.resources[resource];
           }
         } catch (exception) {
-          this.logException(functionObj.enabled, exception);
+          this.logException(resourceObj.enabled, exception);
         }
       }
     });
@@ -88,4 +88,4 @@ class serverlessPluginConditionalFunctions {
   }
 }
 
-module.exports = serverlessPluginConditionalFunctions;
+module.exports = serverlessPluginConditionalResources;
